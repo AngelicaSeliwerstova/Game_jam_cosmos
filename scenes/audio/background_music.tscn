@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/music/Lunar_Greenhouse_Reference_180s.wav" id="1_music"]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer"]
+process_mode = 3
+stream = ExtResource("1_music")
+volume_db = -8.0
+autoplay = true
+bus = &"Music"
