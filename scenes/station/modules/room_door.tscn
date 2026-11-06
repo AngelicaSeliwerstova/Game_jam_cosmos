@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/station_door.gd" id="1_ebvh3"]
+[ext_resource type="Material" path="res://assets/materials/station_wall.tres" id="2_ymfne"]
+[ext_resource type="Material" path="res://assets/materials/station/tank.tres" id="3_axa3u"]
+[ext_resource type="Material" path="res://assets/materials/station/green_light.tres" id="4_7351y"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0g5b2"]
+material = ExtResource("2_ymfne")
+size = Vector3(1.775, 2.38, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fjw3y"]
+material = ExtResource("3_axa3u")
+size = Vector3(1.33125, 0.48, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_634of"]
+material = ExtResource("3_axa3u")
+size = Vector3(1.33125, 0.48, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ncghq"]
+material = ExtResource("4_7351y")
+size = Vector3(0.05, 2.38, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_56nqt"]
+material = ExtResource("4_7351y")
+size = Vector3(0.05, 2.38, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ego3f"]
+size = Vector3(1.775, 2.38, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhym5"]
+size = Vector3(2.4, 2.8, 1.6)
+
+[node name="Door" type="Node3D" unique_id=631476875]
+script = ExtResource("1_ebvh3")
+
+[node name="SwingLeaf" type="AnimatableBody3D" parent="." unique_id=2062000533]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0, 0)
+collision_mask = 2
+
+[node name="Panel" type="Node3D" parent="SwingLeaf" unique_id=1734615712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.2, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="SwingLeaf/Panel" unique_id=2132400183]
+mesh = SubResource("BoxMesh_0g5b2")
+
+[node name="Inset" type="Node3D" parent="SwingLeaf" unique_id=1701826228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.2, 0.061)
+
+[node name="Visuals" type="MeshInstance3D" parent="SwingLeaf/Inset" unique_id=466642496]
+mesh = SubResource("BoxMesh_fjw3y")
+
+[node name="BackInset" type="Node3D" parent="SwingLeaf" unique_id=1449660442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.2, -0.061)
+
+[node name="Visuals" type="MeshInstance3D" parent="SwingLeaf/BackInset" unique_id=2103021242]
+mesh = SubResource("BoxMesh_634of")
+
+[node name="StatusStripe" type="Node3D" parent="SwingLeaf" unique_id=1604769186]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.067499995, 1.2, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="SwingLeaf/StatusStripe" unique_id=886760353]
+mesh = SubResource("BoxMesh_ncghq")
+
+[node name="StatusStripe2" type="Node3D" parent="SwingLeaf" unique_id=1999157953]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7325, 1.2, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="SwingLeaf/StatusStripe2" unique_id=992598526]
+mesh = SubResource("BoxMesh_56nqt")
+
+[node name="Collision" type="CollisionShape3D" parent="SwingLeaf" unique_id=1335298571]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.2, 0)
+shape = SubResource("BoxShape3D_ego3f")
+
+[node name="CloseGuard" type="Area3D" parent="." unique_id=260432458]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="@CollisionShape3D@5" type="CollisionShape3D" parent="CloseGuard" unique_id=1947952736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("BoxShape3D_hhym5")

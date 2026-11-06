@@ -1,7 +1,7 @@
 class_name StationPlayer
 extends CharacterBody3D
 
-signal target_changed(slot: PlantingSlot)
+signal target_changed(target: Node)
 signal inspection_requested(slot: PlantingSlot)
 
 @export var walk_speed: float = 2.7
@@ -10,7 +10,7 @@ signal inspection_requested(slot: PlantingSlot)
 @export var mouse_sensitivity: float = 0.0025
 
 var controls_enabled: bool = false
-var target: PlantingSlot
+var target: Node
 var gravity: float = float(ProjectSettings.get_setting("physics/3d/default_gravity"))
 var _view_yaw: float = 0.0
 
@@ -95,23 +95,39 @@ func interact() -> void:
 		return
 	# Recheck the nearest solid collider on E, so a cached target cannot bypass a wall.
 	_update_target()
-	if target != null:
+	if target is PlantingSlot:
 		inspection_requested.emit(target)
+	elif is_instance_valid(target) and target.has_method("interact"):
+		target.interact(self)
+
+
+func get_target_prompt() -> String:
+	if target is PlantingSlot:
+		return "E — осмотреть грядку"
+	if is_instance_valid(target) and target.has_method("get_interaction_prompt"):
+		return target.get_interaction_prompt()
+	return ""
 
 
 func _update_target() -> void:
 	# Interaction uses the current physical position, independently of camera smoothing.
 	interaction_ray.global_transform = Transform3D(_view_basis(), global_position + Vector3.UP * head.position.y)
 	interaction_ray.force_raycast_update()
-	_set_target(interaction_ray.get_collider() as PlantingSlot)
+	var hit := interaction_ray.get_collider() as Node
+	while hit != null:
+		if hit is PlantingSlot or (hit.has_method("interact") and hit.has_method("get_interaction_prompt")):
+			_set_target(hit)
+			return
+		hit = hit.get_parent()
+	_set_target(null)
 
 
-func _set_target(value: PlantingSlot) -> void:
+func _set_target(value: Node) -> void:
 	if target == value:
 		return
-	if is_instance_valid(target):
+	if is_instance_valid(target) and target.has_method("set_highlighted"):
 		target.set_highlighted(false)
 	target = value
-	if target != null:
+	if target != null and target.has_method("set_highlighted"):
 		target.set_highlighted(true)
 	target_changed.emit(target)

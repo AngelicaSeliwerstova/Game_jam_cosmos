@@ -50,70 +50,70 @@ size = Vector3(0.24, 0.015, 0.01)
 material = ExtResource("2_lwk3x")
 size = Vector3(0.65, 0.04, 0.24)
 
-[node name="Workstation" type="Node3D" unique_id=649445914]
+[node name="Workstation" type="Node3D" unique_id=1455310726]
 
-[node name="Cabinet" type="StaticBody3D" parent="." unique_id=1919640495]
+[node name="Cabinet" type="StaticBody3D" parent="." unique_id=295541123]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.44, 0)
 collision_mask = 0
 
-[node name="Visuals" type="MeshInstance3D" parent="Cabinet" unique_id=310073238]
+[node name="Visuals" type="MeshInstance3D" parent="Cabinet" unique_id=1904890273]
 mesh = SubResource("BoxMesh_ulgyp")
 
-[node name="Collision" type="CollisionShape3D" parent="Cabinet" unique_id=1565083635]
+[node name="Collision" type="CollisionShape3D" parent="Cabinet" unique_id=829773468]
 shape = SubResource("BoxShape3D_6ey5g")
 
-[node name="Leg" type="StaticBody3D" parent="." unique_id=1832086082]
+[node name="Leg" type="StaticBody3D" parent="." unique_id=1422220277]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.44, 0)
 collision_mask = 0
 
-[node name="Visuals" type="MeshInstance3D" parent="Leg" unique_id=1950030836]
+[node name="Visuals" type="MeshInstance3D" parent="Leg" unique_id=1176785249]
 mesh = SubResource("BoxMesh_6n07e")
 
-[node name="Collision" type="CollisionShape3D" parent="Leg" unique_id=1530173687]
+[node name="Collision" type="CollisionShape3D" parent="Leg" unique_id=1426587818]
 shape = SubResource("BoxShape3D_lm0hv")
 
-[node name="Worktop" type="StaticBody3D" parent="." unique_id=1410112575]
+[node name="Worktop" type="StaticBody3D" parent="." unique_id=468464520]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94, 0)
 collision_mask = 0
 
-[node name="Visuals" type="MeshInstance3D" parent="Worktop" unique_id=285746916]
+[node name="Visuals" type="MeshInstance3D" parent="Worktop" unique_id=936556475]
 mesh = SubResource("BoxMesh_el6a1")
 
-[node name="Collision" type="CollisionShape3D" parent="Worktop" unique_id=1192600469]
+[node name="Collision" type="CollisionShape3D" parent="Worktop" unique_id=1424817536]
 shape = SubResource("BoxShape3D_by1o2")
 
-[node name="ScreenFrame" type="Node3D" parent="." unique_id=211140985]
+[node name="ScreenFrame" type="Node3D" parent="." unique_id=294886408]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36, -0.28)
 
-[node name="Visuals" type="MeshInstance3D" parent="ScreenFrame" unique_id=1770596823]
+[node name="Visuals" type="MeshInstance3D" parent="ScreenFrame" unique_id=2039925072]
 mesh = SubResource("BoxMesh_70lp6")
 
-[node name="Display" type="Node3D" parent="." unique_id=635258081]
+[node name="Display" type="Node3D" parent="." unique_id=1359727664]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36, -0.211)
 
-[node name="Visuals" type="MeshInstance3D" parent="Display" unique_id=1646594865]
+[node name="Visuals" type="MeshInstance3D" parent="Display" unique_id=1887772398]
 mesh = SubResource("BoxMesh_ygfm7")
 
-[node name="DisplayLine" type="Node3D" parent="." unique_id=1256082350]
+[node name="DisplayLine" type="Node3D" parent="." unique_id=399311653]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.47, -0.2)
 
-[node name="Visuals" type="MeshInstance3D" parent="DisplayLine" unique_id=1458698591]
+[node name="Visuals" type="MeshInstance3D" parent="DisplayLine" unique_id=1280410265]
 mesh = SubResource("BoxMesh_lbttp")
 
-[node name="DisplayLine2" type="Node3D" parent="." unique_id=838440382]
+[node name="DisplayLine2" type="Node3D" parent="." unique_id=701427162]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.39, -0.2)
 
-[node name="Visuals" type="MeshInstance3D" parent="DisplayLine2" unique_id=1295739724]
+[node name="Visuals" type="MeshInstance3D" parent="DisplayLine2" unique_id=1358294958]
 mesh = SubResource("BoxMesh_idy6b")
 
-[node name="DisplayLine3" type="Node3D" parent="." unique_id=2494659]
+[node name="DisplayLine3" type="Node3D" parent="." unique_id=1434340144]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.31, -0.2)
 
-[node name="Visuals" type="MeshInstance3D" parent="DisplayLine3" unique_id=1898863101]
+[node name="Visuals" type="MeshInstance3D" parent="DisplayLine3" unique_id=2029733992]
 mesh = SubResource("BoxMesh_obn0x")
 
-[node name="Keys" type="Node3D" parent="." unique_id=2060528572]
+[node name="Keys" type="Node3D" parent="." unique_id=125763331]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0.19)
 
-[node name="Visuals" type="MeshInstance3D" parent="Keys" unique_id=1081854612]
+[node name="Visuals" type="MeshInstance3D" parent="Keys" unique_id=1119362178]
 mesh = SubResource("BoxMesh_b8k5c")

@@ -101,9 +101,11 @@ func run() -> void:
 		return
 	DirAccess.make_dir_recursive_absolute("res://docs/station")
 	change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
+	await scene_changed
 	await frames()
 	check(current_scene.name == "MainMenu","main menu loads")
 	current_scene.get_node("%StartButton").pressed.emit()
+	await scene_changed
 	await frames(8)
 	scene = current_scene
 	player = scene.player
@@ -121,6 +123,17 @@ func run() -> void:
 	check(scene.world_viewport.size==Vector2i(640,360),"existing 640x360 3D buffer preserved")
 	check(scene.get_node("HUD").get_viewport()==root,"HUD remains at window resolution")
 	check(player.camera.is_set_as_top_level() and ProjectSettings.get_setting("physics/common/physics_interpolation"),"independent camera follows interpolated physics")
+	# Architectural capsule routes are checked with doors open. Door interaction,
+	# obstruction and airlock sequencing have their own real-input integration test.
+	player.teleport_to(Vector3(0,0.025,0))
+	for door: StationDoor in get_nodes_in_group("station_doors"):
+		if door.mode != StationDoor.Mode.AIRLOCK:
+			door.request_open(true)
+			if door.mode == StationDoor.Mode.AUTOMATIC:
+				door.close_delay = 2.0
+	var airlock: StationAirlock = world.get_node("Rooms/Airlock/AirlockControl")
+	airlock.request(&"inner")
+	await frames(55)
 	var all_clear := true
 	var all_supported := true
 	for i: int in range(144):
@@ -224,6 +237,8 @@ func run() -> void:
 		roof_complete = roof_complete and not space.intersect_ray(query).is_empty()
 	check(roof_complete,"corridor roof has no gaps in 72 samples")
 	var air_angle := 5*PI/3-PI/24
+	airlock.request(&"outer")
+	await frames(100)
 	check(clear_segment(point(OUTER_RADIUS-1.3,air_angle),point(OUTER_RADIUS+0.7,air_angle)),"outer airlock doorway and landing traversable")
 	player.teleport_to(point(OUTER_RADIUS-1.3,air_angle),air_angle+PI)
 	await frames()
@@ -232,6 +247,7 @@ func run() -> void:
 	Input.action_release("move_forward")
 	await frames()
 	check(Vector2(player.position.x,player.position.z).length()>OUTER_RADIUS+3.8 and absf(player.position.y+0.45)<0.08,"walk down airlock ramp onto lunar ground")
+	airlock.request(&"outer")
 	Input.action_press("move_back")
 	await frames(118)
 	Input.action_release("move_back")

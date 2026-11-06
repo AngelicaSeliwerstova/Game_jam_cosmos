@@ -115,10 +115,12 @@ func light_at(parent: Node, title: String, at: Vector3, color: Color, energy: fl
 
 func own_tree(node: Node, owner_node: Node) -> void:
 	for child: Node in node.get_children():
+		# Keep inherited module contents, but still save newly attached children
+		# such as buttons on a door instance.
+		if child.owner != null and child.owner != owner_node:
+			continue
 		child.owner = owner_node
-		# Preserve the contents of reusable scenes as instances.
-		if child.scene_file_path.is_empty():
-			own_tree(child, owner_node)
+		own_tree(child, owner_node)
 
 func save_scene(node: Node, path: String) -> PackedScene:
 	own_tree(node, node)
@@ -197,6 +199,108 @@ func make_modules() -> void:
 	box(node,"FillLevel",Vector3(0,0.96,0.58),Vector3(0.06,0.43,0.02),mats.cold_light)
 	modules.tank = save_scene(node,MODULES+"water_tank.tscn")
 	node.free()
+	modules.automatic_door = make_functional_door("automatic_door",DOOR_WIDTH,0)
+	modules.room_door = make_functional_door("room_door",DOOR_WIDTH,1)
+	modules.airlock_door = make_functional_door("airlock_door",DOOR_WIDTH,2)
+	make_button_module()
+
+func door_area(parent: Node, title: String, size: Vector3) -> void:
+	var area := Area3D.new()
+	area.name = title
+	area.collision_layer = 0
+	area.collision_mask = 2
+	area.monitorable = false
+	parent.add_child(area)
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	collision.position.y = size.y*0.5
+	area.add_child(collision)
+
+func door_leaf(parent: Node, title: String, at: Vector3, size: Vector3, visual_offset: Vector3, concealed: bool = false) -> AnimatableBody3D:
+	var body := AnimatableBody3D.new()
+	body.name = title
+	body.collision_mask = 2
+	body.position = at
+	parent.add_child(body)
+	box(body,"Panel",visual_offset,size,mats.panel)
+	if not concealed:
+		box(body,"Inset",visual_offset+Vector3(0,0,0.061),Vector3(size.x*0.75,0.48,0.025),mats.tank)
+		box(body,"BackInset",visual_offset-Vector3(0,0,0.061),Vector3(size.x*0.75,0.48,0.025),mats.tank)
+		for side: float in [-1,1]:
+			box(body,"StatusStripe",visual_offset+Vector3(side*(size.x*0.5-0.055),0,0),Vector3(0.05,size.y,0.15),mats.green_light)
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collision := CollisionShape3D.new()
+	collision.name = "Collision"
+	collision.shape = shape
+	collision.position = visual_offset
+	body.add_child(collision)
+	return body
+
+func make_functional_door(title: String, width: float, mode: int) -> PackedScene:
+	var node := Node3D.new()
+	node.name = "Door"
+	node.set_script(load("res://scripts/station_door.gd"))
+	node.set("mode",mode)
+	node.set("opening_width",width)
+	if mode == 1:
+		door_leaf(node,"SwingLeaf",Vector3(-width*0.5,0,0),Vector3(width-0.025,2.38,0.12),Vector3(width*0.5,1.2,0))
+	else:
+		for side: float in [-1,1]:
+			door_leaf(node,"LeftLeaf" if side<0 else "RightLeaf",Vector3(side*width*0.25,1.2,0),Vector3(width*0.5-0.015,2.38,0.06 if mode==0 else 0.12),Vector3.ZERO,mode==0)
+		if mode == 0:
+			node.set("slide_clearance",0.03)
+			# Fill the existing greenhouse opening with a thin, flat wall bay.
+			# The leaves retract between its two skins, without projecting housings.
+			var facade_width := 2.0*R_GARDEN*sin(PI/12)
+			var pier_width := (facade_width-width)*0.5
+			for side: float in [-1,1]:
+				for face: float in [-1,1]:
+					box(node,"WallSkin",Vector3(side*(width*0.5+pier_width*0.5),HEIGHT*0.5,face*0.085),Vector3(pier_width,HEIGHT,0.04),mats.panel,true)
+					box(node,"RecessTrim",Vector3(side*(width*0.5+0.012),1.2,face*0.11),Vector3(0.025,2.4,0.012),mats.metal)
+			box(node,"WallHeader",Vector3(0,(HEIGHT+2.4)*0.5,0),Vector3(width,HEIGHT-2.4,0.18),mats.panel,true)
+			for face: float in [-1,1]:
+				box(node,"HeaderSeam",Vector3(0,2.412,face*0.11),Vector3(width+0.05,0.025,0.012),mats.metal)
+			door_area(node,"ApproachSensor",Vector3(width+1.0,3.0,6.2))
+	door_area(node,"CloseGuard",Vector3(width+0.6,2.8,1.6))
+	var packed := save_scene(node,MODULES+title+".tscn")
+	node.free()
+	return packed
+
+func make_button_module() -> void:
+	var node := StaticBody3D.new()
+	node.name = "Button"
+	node.collision_mask = 0
+	node.set_script(load("res://scripts/door_button.gd"))
+	box(node,"Housing",Vector3.ZERO,Vector3(0.32,0.44,0.16),mats.metal)
+	box(node,"PressPlate",Vector3(0,0,0.09),Vector3(0.23,0.24,0.035),mats.warm_light)
+	var highlight := MeshInstance3D.new()
+	highlight.name = "Highlight"
+	var mesh := BoxMesh.new()
+	mesh.material = mats.green_light
+	mesh.size = Vector3(0.35,0.47,0.03)
+	highlight.mesh = mesh
+	highlight.visible = false
+	node.add_child(highlight)
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(0.32,0.44,0.20)
+	collision.shape = shape
+	node.add_child(collision)
+	sign_at(node,"Title","ШЛЮЗ",Vector3(0,0.30,0.10),0,Color(1,0.85,0.5),20)
+	sign_at(node,"Status","ГОТОВ",Vector3(0,0.58,0.10),0,Color(0.8,0.95,0.85),17)
+	modules.button = save_scene(node,MODULES+"airlock_button.tscn")
+	node.free()
+
+func airlock_buttons(door: Node3D, side: String) -> void:
+	for face: float in [-1,1]:
+		var title := ("StationButton" if face<0 else "ChamberButton") if side=="inner" else ("ChamberButton" if face<0 else "SurfaceButton")
+		var button := instance(door,"button",title,Vector3(DOOR_WIDTH*0.5+0.36,1.35,face*0.24),PI if face<0 else 0.0)
+		button.set("controller_path",NodePath("../../../AirlockControl"))
+		button.set("side",side)
+		button.get_node("Title").text = "01 / СТАНЦИЯ" if side=="inner" else "02 / ЛУНА"
 
 func triangle(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void:
 	# Godot uses clockwise front faces; keep upper surfaces facing +Y.
@@ -246,7 +350,7 @@ func make_floor_collision() -> void:
 	collision.shape = shape
 	body.add_child(collision)
 
-func wall(parent: Node, title: String, a: Vector3, b: Vector3, kind: String = "solid") -> void:
+func wall(parent: Node, title: String, a: Vector3, b: Vector3, kind: String = "solid", gate: String = "") -> void:
 	var segment := group(parent,title)
 	segment.position = (a+b)*0.5
 	# Local +Z is toward the exterior for clockwise station polygons.
@@ -259,6 +363,10 @@ func wall(parent: Node, title: String, a: Vector3, b: Vector3, kind: String = "s
 			box(segment,"WallPier",Vector3(x*(frame_width*0.5+side*0.5),HEIGHT*0.5,0),Vector3(side,HEIGHT,0.18),mats.panel,true)
 		box(segment,"DoorHeader",Vector3(0,(HEIGHT+2.4)*0.5,0),Vector3(frame_width,HEIGHT-2.4,0.18),mats.panel,true)
 		instance(segment,"door","Frame",Vector3.ZERO)
+		if not gate.is_empty():
+			var door := instance(segment,"airlock_door" if gate=="airlock" else "room_door","Door",Vector3.ZERO)
+			if gate == "airlock":
+				airlock_buttons(door,"inner" if title.begins_with("Hall") else "outer")
 	elif kind == "window":
 		box(segment,"Sill",Vector3(0,0.52,0),Vector3(width,1.04,0.18),mats.panel,true)
 		box(segment,"Header",Vector3(0,2.96,0),Vector3(width,0.38,0.18),mats.panel,true)
@@ -286,10 +394,7 @@ func make_greenhouse() -> void:
 		var a := TAU*i/24
 		var b := TAU*(i+1)/24
 		var open: bool = i in [5,6,17,18]
-		if open:
-			# Two adjacent facets form a wide entrance with no threshold.
-			box(garden,"EntranceHeader",(point(R_GARDEN,a)+point(R_GARDEN,b))*0.5+Vector3.UP*2.78,Vector3(point(R_GARDEN,a).distance_to(point(R_GARDEN,b))+0.04,0.74,0.18),mats.metal,true).rotation.y = (a+b)*0.5
-		else:
+		if not open:
 			wall(garden,"GlazedBay%02d" % i,point(R_GARDEN,a),point(R_GARDEN,b),"window")
 		for j: int in range(3):
 			var p := point(radii[j],a,levels[j])
@@ -322,7 +427,9 @@ func make_greenhouse() -> void:
 		box(garden,"GrowLuminaire",Vector3(x,3.17,0),Vector3(0.22,0.1,4.3),mats.green_light)
 	for x: float in [-1,1]:
 		# The entrance axes are +/-X. Keep the central cross aisle free.
-		sign_at(garden,"AtriumSign","О Р А Н Ж Е Р Е Я",Vector3(x*(R_GARDEN-0.2),2.75,0),x*PI/2,Color(0.67,0.94,0.73),24)
+		instance(garden,"automatic_door","EastDoor" if x>0 else "WestDoor",Vector3(x*R_GARDEN*cos(PI/12),0,0),x*PI*0.5)
+		sign_at(garden,"AtriumSign","ОРАНЖЕРЕЯ",Vector3(x*(R_GARDEN*cos(PI/12)+0.12),2.72,0),x*PI/2,Color(0.67,0.94,0.73),24)
+		sign_at(garden,"CorridorSign","КОРИДОР",Vector3(x*(R_GARDEN*cos(PI/12)-0.12),2.72,0),-x*PI/2,Color(0.78,0.85,0.8),24)
 
 func room_props(room: Node3D, index: int) -> void:
 	match index:
@@ -377,16 +484,13 @@ func room_props(room: Node3D, index: int) -> void:
 				beam(room,"PipeRiser",Vector3(x,0.3,10.8),Vector3(x,2.6,10.8),0.12,mats.tank)
 		5:
 			instance(room,"desk","CommsTerminal",Vector3(2.7,0,9.9),PI)
-			box(room,"SuitAlcove",Vector3(-2.7,1.2,10.3),Vector3(1.55,2.4,0.9),mats.metal,true)
-			box(room,"SuitTorso",Vector3(-2.7,1.38,9.78),Vector3(0.63,0.8,0.38),mats.panel)
-			cylinder(room,"Helmet",Vector3(-2.7,2.02,9.78),0.3,0.4,mats.panel)
-			box(room,"Visor",Vector3(-2.7,2.04,9.47),Vector3(0.4,0.18,0.05),mats.screen)
-			for x: float in [-2.9,-2.5]:
+			box(room,"SuitAlcove",Vector3(-4.0,1.2,10.3),Vector3(1.55,2.4,0.9),mats.metal,true)
+			box(room,"SuitTorso",Vector3(-4.0,1.38,9.78),Vector3(0.63,0.8,0.38),mats.panel)
+			cylinder(room,"Helmet",Vector3(-4.0,2.02,9.78),0.3,0.4,mats.panel)
+			box(room,"Visor",Vector3(-4.0,2.04,9.47),Vector3(0.4,0.18,0.05),mats.screen)
+			for x: float in [-4.2,-3.8]:
 				box(room,"SuitLeg",Vector3(x,0.65,9.78),Vector3(0.24,0.7,0.28),mats.panel)
-			# Recessed door leaves communicate an open lock, without automation.
-			for x: float in [-1,1]:
-				box(room,"ParkedInnerDoor",Vector3(x*1.65,1.15,7.0),Vector3(0.5,2.3,0.08),mats.tank)
-			sign_at(room,"AirlockProtocol","ШЛЮЗ 06 / ВЫХОД НА ПОВЕРХНОСТЬ",Vector3(0,2.7,9.0),PI,Color(1,0.76,0.4),22)
+			sign_at(room,"AirlockProtocol","1 / ВНУТРЕННЯЯ   →   2 / НАРУЖНАЯ\nОТКРЫВАЙТЕ КНОПКАМИ · E",Vector3(0,2.7,9.0),PI,Color(1,0.76,0.4),22)
 
 func make_rooms() -> void:
 	var rooms := group(world,"Rooms")
@@ -408,8 +512,13 @@ func make_rooms() -> void:
 		for i: int in range(4):
 			var a := start+i*PI/12
 			var b := a+PI/12
-			wall(room,"HallPartition%02d" % i,point(R_HALL,a),point(R_HALL,b),"door" if i==1 else "solid")
-			wall(room,"OuterHull%02d" % i,point(R_OUTER,a),point(R_OUTER,b),"door" if index==5 and i==1 else ("window" if i in [1,2] else "solid"))
+			wall(room,"HallPartition%02d" % i,point(R_HALL,a),point(R_HALL,b),"door" if i==1 else "solid","airlock" if index==5 else "manual")
+			wall(room,"OuterHull%02d" % i,point(R_OUTER,a),point(R_OUTER,b),"door" if index==5 and i==1 else ("window" if i in [1,2] else "solid"),"airlock" if index==5 else "")
+		if index == 5:
+			var controller := group(room,"AirlockControl")
+			controller.set_script(load("res://scripts/station_airlock.gd"))
+			controller.set("inner_door_path",NodePath("../HallPartition01/Door"))
+			controller.set("outer_door_path",NodePath("../OuterHull01/Door"))
 		# One radial partition per sector, shared with the next room.
 		wall(room,"RadialPartition",point(R_HALL,end),point(R_OUTER,end))
 		var door_center := (point(R_HALL,-PI/12)+point(R_HALL,0))*0.5

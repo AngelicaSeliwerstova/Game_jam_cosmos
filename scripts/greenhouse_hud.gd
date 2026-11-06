@@ -10,7 +10,8 @@ signal capture_requested
 @onready var capture_button: Button = %CaptureButton
 
 
-func show_target(available: bool) -> void:
+func show_target(available: bool, prompt: String = "E — осмотреть грядку") -> void:
+	interaction_hint.text = prompt
 	interaction_hint.visible = available
 
 
