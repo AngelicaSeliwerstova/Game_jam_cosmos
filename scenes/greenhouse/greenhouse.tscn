@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/greenhouse.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/greenhouse/greenhouse_world.tscn" id="2_world"]
+[ext_resource type="PackedScene" path="res://scenes/ui/greenhouse_hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="4_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inspection_panel.tscn" id="5_inspection"]
+
+[node name="Greenhouse" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.04, 0.055, 1)
+
+[node name="WorldViewport" type="SubViewport" parent="."]
+own_world_3d = true
+size = Vector2i(640, 360)
+msaa_3d = 0
+screen_space_aa = 0
+use_taa = false
+use_debanding = false
+gui_disable_input = true
+physics_object_picking = false
+render_target_update_mode = 4
+
+[node name="World" parent="WorldViewport" instance=ExtResource("2_world")]
+
+[node name="Image" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_pause")]
+
+[node name="InspectionPanel" parent="." instance=ExtResource("5_inspection")]
+
+[connection signal="pause_requested" from="HUD" to="PauseMenu" method="open"]
+[connection signal="capture_requested" from="HUD" to="." method="_capture_mouse"]
+[connection signal="opened" from="PauseMenu" to="." method="_on_pause_opened"]
+[connection signal="resumed" from="PauseMenu" to="." method="_on_resumed"]
+[connection signal="closed" from="InspectionPanel" to="." method="_on_inspection_closed"]

@@ -1,0 +1,22 @@
+# Godot imports and editor state. Keep .uid and source .import files.
+.godot/
+*.tmp
+*.temp
+*.bak
+*~
+
+# Local editors and tools.
+.idea/
+.vscode/
+.vs/
+.DS_Store
+Thumbs.db
+.tools/
+
+# Exported games and local export credentials.
+/build/
+/dist/
+export_credentials.cfg
+.env
+.env.*
+!.env.example

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "crate"
+albedo_color = Color(0.47, 0.46, 0.34, 1)
+roughness = 0.95
+texture_filter = 0

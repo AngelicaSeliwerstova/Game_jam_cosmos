@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/materials/station_metal.tres" id="1_xajk2"]
+[ext_resource type="Material" path="res://assets/materials/station/green_light.tres" id="2_ooea8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pcadd"]
+material = ExtResource("1_xajk2")
+size = Vector3(0.16, 2.4, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jdepp"]
+material = ExtResource("1_xajk2")
+size = Vector3(0.16, 2.4, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vhpwm"]
+material = ExtResource("1_xajk2")
+size = Vector3(1.82, 0.16, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vc8of"]
+material = ExtResource("2_ooea8")
+size = Vector3(1.2, 0.035, 0.02)
+
+[node name="DoorFrame" type="Node3D" unique_id=1977824321]
+
+[node name="LeftJamb" type="Node3D" parent="." unique_id=2002562700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.83, 1.2, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="LeftJamb" unique_id=1228314531]
+mesh = SubResource("BoxMesh_pcadd")
+
+[node name="RightJamb" type="Node3D" parent="." unique_id=2143445603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.83, 1.2, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="RightJamb" unique_id=1155498232]
+mesh = SubResource("BoxMesh_jdepp")
+
+[node name="Lintel" type="Node3D" parent="." unique_id=423172797]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="Lintel" unique_id=1095366294]
+mesh = SubResource("BoxMesh_vhpwm")
+
+[node name="StatusStrip" type="Node3D" parent="." unique_id=47241974]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -0.17)
+
+[node name="Visuals" type="MeshInstance3D" parent="StatusStrip" unique_id=118263113]
+mesh = SubResource("BoxMesh_vc8of")

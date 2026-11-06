@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/materials/station/crate.tres" id="1_s3d5k"]
+[ext_resource type="Material" path="res://assets/materials/station_metal.tres" id="2_m1bcc"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_mri36"]
+material = ExtResource("1_s3d5k")
+size = Vector3(0.85, 0.76, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_encl6"]
+size = Vector3(0.85, 0.76, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kcd0l"]
+material = ExtResource("2_m1bcc")
+size = Vector3(0.9, 0.08, 0.75)
+
+[sub_resource type="BoxMesh" id="BoxMesh_24s4a"]
+material = ExtResource("2_m1bcc")
+size = Vector3(0.045, 0.78, 0.72)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8dgjv"]
+material = ExtResource("2_m1bcc")
+size = Vector3(0.045, 0.78, 0.72)
+
+[node name="SupplyCrate" type="Node3D" unique_id=1310303590]
+
+[node name="Body" type="StaticBody3D" parent="." unique_id=1214178356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+collision_mask = 0
+
+[node name="Visuals" type="MeshInstance3D" parent="Body" unique_id=556639307]
+mesh = SubResource("BoxMesh_mri36")
+
+[node name="Collision" type="CollisionShape3D" parent="Body" unique_id=1593988829]
+shape = SubResource("BoxShape3D_encl6")
+
+[node name="Lid" type="Node3D" parent="." unique_id=2124620206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="Lid" unique_id=1163124720]
+mesh = SubResource("BoxMesh_kcd0l")
+
+[node name="Band" type="Node3D" parent="." unique_id=463679394]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29, 0.38, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="Band" unique_id=1621693515]
+mesh = SubResource("BoxMesh_24s4a")
+
+[node name="Band2" type="Node3D" parent="." unique_id=520427670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0.38, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="Band2" unique_id=1923202808]
+mesh = SubResource("BoxMesh_8dgjv")
+
+[node name="InventoryTag" type="Label3D" parent="." unique_id=328553058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0.357)
+pixel_size = 0.0035
+texture_filter = 0
+modulate = Color(0.86, 0.91, 0.76, 1)
+text = "SEEDS / 04"
+font_size = 18
+outline_size = 3

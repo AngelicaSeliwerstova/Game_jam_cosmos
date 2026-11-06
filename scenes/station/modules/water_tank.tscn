@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/materials/station/tank.tres" id="1_x3wrk"]
+[ext_resource type="Material" path="res://assets/materials/station_metal.tres" id="2_jyjwo"]
+[ext_resource type="Material" path="res://assets/materials/station/screen.tres" id="3_j3luj"]
+[ext_resource type="Material" path="res://assets/materials/station/cold_light.tres" id="4_euyll"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qmmy0"]
+material = ExtResource("1_x3wrk")
+top_radius = 0.55
+bottom_radius = 0.55
+height = 1.8
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kyfmh"]
+height = 1.8
+radius = 0.55
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qppg3"]
+material = ExtResource("2_jyjwo")
+top_radius = 0.58
+bottom_radius = 0.58
+height = 0.12
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_c3tv6"]
+material = ExtResource("2_jyjwo")
+top_radius = 0.58
+bottom_radius = 0.58
+height = 0.12
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_sxdlb"]
+material = ExtResource("3_j3luj")
+size = Vector3(0.15, 0.75, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p03eb"]
+material = ExtResource("4_euyll")
+size = Vector3(0.06, 0.43, 0.02)
+
+[node name="WaterTank" type="Node3D" unique_id=641989139]
+
+[node name="Tank" type="StaticBody3D" parent="." unique_id=268435561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_mask = 0
+
+[node name="Visuals" type="MeshInstance3D" parent="Tank" unique_id=1786079424]
+mesh = SubResource("CylinderMesh_qmmy0")
+
+[node name="Collision" type="CollisionShape3D" parent="Tank" unique_id=432654832]
+shape = SubResource("CylinderShape3D_kyfmh")
+
+[node name="Collar" type="Node3D" parent="." unique_id=227869499]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="Collar" unique_id=482969114]
+mesh = SubResource("CylinderMesh_qppg3")
+
+[node name="Collar2" type="Node3D" parent="." unique_id=441452806]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.76, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="Collar2" unique_id=1879189312]
+mesh = SubResource("CylinderMesh_c3tv6")
+
+[node name="Gauge" type="Node3D" parent="." unique_id=1299326933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06, 0.55)
+
+[node name="Visuals" type="MeshInstance3D" parent="Gauge" unique_id=1183453414]
+mesh = SubResource("BoxMesh_sxdlb")
+
+[node name="FillLevel" type="Node3D" parent="." unique_id=928110637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96, 0.58)
+
+[node name="Visuals" type="MeshInstance3D" parent="FillLevel" unique_id=730145904]
+mesh = SubResource("BoxMesh_p03eb")

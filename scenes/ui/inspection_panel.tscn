@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/inspection_panel.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/themes/lunar_theme.tres" id="2_theme"]
+
+[node name="InspectionPanel" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_script")
+
+[node name="Overlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme = ExtResource("2_theme")
+
+[node name="Scrim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.02, 0.025, 0.7)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" type="PanelContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/Card"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Грядка № 1"
+
+[node name="Description" type="Label" parent="Overlay/Center/Card/Content"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+text = "Посадочный модуль лунной теплицы.\n\nПанель осмотра — заглушка прототипа."
+autowrap_mode = 2
+
+[node name="CloseButton" type="Button" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Закрыть"
+
+[node name="Hint" type="Label" parent="Overlay/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.74, 0.71, 1)
+theme_override_font_sizes/font_size = 16
+text = "E / Esc — закрыть"
+horizontal_alignment = 1
+
+[connection signal="button_down" from="Overlay/Center/Card/Content/CloseButton" to="." method="_on_close_button_down"]
