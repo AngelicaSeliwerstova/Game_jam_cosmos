@@ -41,38 +41,38 @@ size = Vector3(0.15, 0.75, 0.04)
 material = ExtResource("4_euyll")
 size = Vector3(0.06, 0.43, 0.02)
 
-[node name="WaterTank" type="Node3D" unique_id=641989139]
+[node name="WaterTank" type="Node3D" unique_id=245457754]
 
-[node name="Tank" type="StaticBody3D" parent="." unique_id=268435561]
+[node name="Tank" type="StaticBody3D" parent="." unique_id=155871563]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_mask = 0
 
-[node name="Visuals" type="MeshInstance3D" parent="Tank" unique_id=1786079424]
+[node name="Visuals" type="MeshInstance3D" parent="Tank" unique_id=931483345]
 mesh = SubResource("CylinderMesh_qmmy0")
 
-[node name="Collision" type="CollisionShape3D" parent="Tank" unique_id=432654832]
+[node name="Collision" type="CollisionShape3D" parent="Tank" unique_id=475228391]
 shape = SubResource("CylinderShape3D_kyfmh")
 
-[node name="Collar" type="Node3D" parent="." unique_id=227869499]
+[node name="Collar" type="Node3D" parent="." unique_id=145473308]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Collar" unique_id=482969114]
+[node name="Visuals" type="MeshInstance3D" parent="Collar" unique_id=1703512213]
 mesh = SubResource("CylinderMesh_qppg3")
 
-[node name="Collar2" type="Node3D" parent="." unique_id=441452806]
+[node name="Collar2" type="Node3D" parent="." unique_id=646738803]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.76, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Collar2" unique_id=1879189312]
+[node name="Visuals" type="MeshInstance3D" parent="Collar2" unique_id=1681319639]
 mesh = SubResource("CylinderMesh_c3tv6")
 
-[node name="Gauge" type="Node3D" parent="." unique_id=1299326933]
+[node name="Gauge" type="Node3D" parent="." unique_id=918333000]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06, 0.55)
 
-[node name="Visuals" type="MeshInstance3D" parent="Gauge" unique_id=1183453414]
+[node name="Visuals" type="MeshInstance3D" parent="Gauge" unique_id=1991436974]
 mesh = SubResource("BoxMesh_sxdlb")
 
-[node name="FillLevel" type="Node3D" parent="." unique_id=928110637]
+[node name="FillLevel" type="Node3D" parent="." unique_id=1063285516]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96, 0.58)
 
-[node name="Visuals" type="MeshInstance3D" parent="FillLevel" unique_id=730145904]
+[node name="Visuals" type="MeshInstance3D" parent="FillLevel" unique_id=1810333792]
 mesh = SubResource("BoxMesh_p03eb")

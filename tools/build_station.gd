@@ -3,9 +3,11 @@ extends SceneTree
 ## Re-running replaces generated scenes, so keep hand edits or make a copy first.
 
 const MODULES := "res://scenes/station/modules/"
-const R_GARDEN := 5.3
-const R_HALL := 8.0
-const R_OUTER := 12.6
+const LAYOUT_SCALE := 1.35
+const R_GARDEN := 5.3 * LAYOUT_SCALE
+const R_HALL := 8.0 * LAYOUT_SCALE
+const R_OUTER := 12.6 * LAYOUT_SCALE
+const DOOR_WIDTH := 1.8
 const HEIGHT := 3.15
 var mats: Dictionary = {}
 var modules: Dictionary = {}
@@ -136,9 +138,9 @@ func instance(parent: Node, kind: String, title: String, at: Vector3, yaw: float
 func make_modules() -> void:
 	var node := Node3D.new()
 	node.name = "DoorFrame"
-	box(node,"LeftJamb",Vector3(-0.83,1.2,0),Vector3(0.16,2.4,0.32),mats.metal)
-	box(node,"RightJamb",Vector3(0.83,1.2,0),Vector3(0.16,2.4,0.32),mats.metal)
-	box(node,"Lintel",Vector3(0,2.48,0),Vector3(1.82,0.16,0.32),mats.metal)
+	box(node,"LeftJamb",Vector3(-(DOOR_WIDTH+0.16)*0.5,1.2,0),Vector3(0.16,2.4,0.32),mats.metal)
+	box(node,"RightJamb",Vector3((DOOR_WIDTH+0.16)*0.5,1.2,0),Vector3(0.16,2.4,0.32),mats.metal)
+	box(node,"Lintel",Vector3(0,2.48,0),Vector3(DOOR_WIDTH+0.32,0.16,0.32),mats.metal)
 	box(node,"StatusStrip",Vector3(0,2.5,-0.17),Vector3(1.2,0.035,0.02),mats.green_light)
 	modules.door = save_scene(node,MODULES+"door_frame.tscn")
 	node.free()
@@ -202,7 +204,7 @@ func triangle(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void:
 		st.set_uv(Vector2(v.x,v.z)*0.25)
 		st.add_vertex(v)
 
-func slab(parent: Node, title: String, inner: float, outer: float, start: float, end: float, y: float, thickness: float, mat: Material, sections: int) -> void:
+func slab(parent: Node, title: String, inner: float, outer: float, start: float, end: float, y: float, thickness: float, mat: Material, sections: int, solid: bool = true) -> void:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	st.set_smooth_group(-1)
@@ -224,7 +226,25 @@ func slab(parent: Node, title: String, inner: float, outer: float, start: float,
 			triangle(st,u,v-Vector3.UP*thickness,v)
 			triangle(st,u,u-Vector3.UP*thickness,v-Vector3.UP*thickness)
 	st.generate_normals()
-	mesh_node(parent,title,st.commit(),Vector3.ZERO,true)
+	mesh_node(parent,title,st.commit(),Vector3.ZERO,solid)
+
+func make_floor_collision() -> void:
+	# One flat convex floor has no internal radial faces to catch the capsule.
+	# Keep per-room visual floors separate and editable.
+	var body := StaticBody3D.new()
+	body.name = "StationFloor"
+	body.collision_mask = 0
+	world.add_child(body)
+	var shape := ConvexPolygonShape3D.new()
+	var vertices := PackedVector3Array()
+	for i: int in range(24):
+		vertices.append(point(R_OUTER,TAU*i/24,0))
+		vertices.append(point(R_OUTER,TAU*i/24,-0.24))
+	shape.points = vertices
+	var collision := CollisionShape3D.new()
+	collision.name = "SeamlessFloor"
+	collision.shape = shape
+	body.add_child(collision)
 
 func wall(parent: Node, title: String, a: Vector3, b: Vector3, kind: String = "solid") -> void:
 	var segment := group(parent,title)
@@ -233,10 +253,11 @@ func wall(parent: Node, title: String, a: Vector3, b: Vector3, kind: String = "s
 	segment.rotation.y = atan2(-(b-a).z,(b-a).x)
 	var width := a.distance_to(b)+0.035
 	if kind == "door":
-		var side := (width-1.82)*0.5
+		var frame_width := DOOR_WIDTH+0.32
+		var side := (width-frame_width)*0.5
 		for x: float in [-1,1]:
-			box(segment,"WallPier",Vector3(x*(0.91+side*0.5),HEIGHT*0.5,0),Vector3(side,HEIGHT,0.18),mats.panel,true)
-		box(segment,"DoorHeader",Vector3(0,(HEIGHT+2.4)*0.5,0),Vector3(1.82,HEIGHT-2.4,0.18),mats.panel,true)
+			box(segment,"WallPier",Vector3(x*(frame_width*0.5+side*0.5),HEIGHT*0.5,0),Vector3(side,HEIGHT,0.18),mats.panel,true)
+		box(segment,"DoorHeader",Vector3(0,(HEIGHT+2.4)*0.5,0),Vector3(frame_width,HEIGHT-2.4,0.18),mats.panel,true)
 		instance(segment,"door","Frame",Vector3.ZERO)
 	elif kind == "window":
 		box(segment,"Sill",Vector3(0,0.52,0),Vector3(width,1.04,0.18),mats.panel,true)
@@ -253,20 +274,20 @@ func wall(parent: Node, title: String, a: Vector3, b: Vector3, kind: String = "s
 
 func make_greenhouse() -> void:
 	var garden := group(world,"Greenhouse")
-	slab(garden,"Floor",0,R_GARDEN,0,TAU,0,0.24,mats.floor,24)
+	slab(garden,"Floor",0,R_GARDEN,0,TAU,0,0.24,mats.floor,24,false)
 	var roof := group(garden,"Dome")
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	st.set_smooth_group(-1)
 	st.set_material(mats.glass)
-	var radii := [R_GARDEN,4.6,2.65,0.0]
+	var radii := [R_GARDEN,4.6*LAYOUT_SCALE,2.65*LAYOUT_SCALE,0.0]
 	var levels := [HEIGHT,4.55,5.5,5.9]
 	for i: int in range(24):
 		var a := TAU*i/24
 		var b := TAU*(i+1)/24
 		var open: bool = i in [5,6,17,18]
 		if open:
-			# Two adjacent facets form a clear 2.74 m entrance with no threshold.
+			# Two adjacent facets form a wide entrance with no threshold.
 			box(garden,"EntranceHeader",(point(R_GARDEN,a)+point(R_GARDEN,b))*0.5+Vector3.UP*2.78,Vector3(point(R_GARDEN,a).distance_to(point(R_GARDEN,b))+0.04,0.74,0.18),mats.metal,true).rotation.y = (a+b)*0.5
 		else:
 			wall(garden,"GlazedBay%02d" % i,point(R_GARDEN,a),point(R_GARDEN,b),"window")
@@ -292,23 +313,23 @@ func make_greenhouse() -> void:
 		bed.slot_number = i+1
 		bed.show_plant = i == 3
 		beds.add_child(bed)
-		bed.position = Vector3((i%3-1)*3.05,0,(-1 if i<3 else 1)*1.9)
+		bed.position = Vector3((i%3-1)*3.05*LAYOUT_SCALE,0,(-1 if i<3 else 1)*1.9*LAYOUT_SCALE)
 		# Keep the sample plant visible in the editor as well as at runtime.
 		bed.get_node("Visuals/PlantPlaceholder").visible = i == 3
 		sign_at(garden,"BedNumber","0%d" % (i+1),bed.position+Vector3(0,0.6,0.86),0,Color(0.73,0.9,0.67),23)
-	for x: float in [-2.7,2.7]:
-		light_at(garden,"GrowLight",Vector3(x,2.75,0),Color(0.77,1,0.82),1.4,7.4)
-		box(garden,"GrowLuminaire",Vector3(x,3.17,0),Vector3(0.22,0.1,3.2),mats.green_light)
+	for x: float in [-2.7*LAYOUT_SCALE,2.7*LAYOUT_SCALE]:
+		light_at(garden,"GrowLight",Vector3(x,2.75,0),Color(0.77,1,0.82),1.6,7.4*LAYOUT_SCALE)
+		box(garden,"GrowLuminaire",Vector3(x,3.17,0),Vector3(0.22,0.1,4.3),mats.green_light)
 	for x: float in [-1,1]:
 		# The entrance axes are +/-X. Keep the central cross aisle free.
-		sign_at(garden,"AtriumSign","О Р А Н Ж Е Р Е Я",Vector3(x*5.1,2.75,0),x*PI/2,Color(0.67,0.94,0.73),24)
+		sign_at(garden,"AtriumSign","О Р А Н Ж Е Р Е Я",Vector3(x*(R_GARDEN-0.2),2.75,0),x*PI/2,Color(0.67,0.94,0.73),24)
 
 func room_props(room: Node3D, index: int) -> void:
 	match index:
 		0:
-			box(room,"BunkFrame",Vector3(-2.6,0.27,10.4),Vector3(1.45,0.54,2.3),mats.metal,true)
-			box(room,"Mattress",Vector3(-2.6,0.59,10.4),Vector3(1.37,0.17,2.15),mats.warm,true)
-			box(room,"Pillow",Vector3(-2.6,0.74,11.1),Vector3(1.02,0.16,0.45),mats.panel)
+			box(room,"BunkFrame",Vector3(-3.1,0.27,10.4),Vector3(1.45,0.54,2.3),mats.metal,true)
+			box(room,"Mattress",Vector3(-3.1,0.59,10.4),Vector3(1.37,0.17,2.15),mats.warm,true)
+			box(room,"Pillow",Vector3(-3.1,0.74,11.1),Vector3(1.02,0.16,0.45),mats.panel)
 			instance(room,"desk","PersonalDesk",Vector3(2.3,0,10.4),PI)
 			box(room,"Locker",Vector3(3.8,1.05,9.3),Vector3(1.1,2.1,0.8),mats.panel,true)
 			box(room,"LockerHandle",Vector3(3.6,1.1,8.88),Vector3(0.05,0.32,0.06),mats.metal)
@@ -364,13 +385,13 @@ func room_props(room: Node3D, index: int) -> void:
 				box(room,"SuitLeg",Vector3(x,0.65,9.78),Vector3(0.24,0.7,0.28),mats.panel)
 			# Recessed door leaves communicate an open lock, without automation.
 			for x: float in [-1,1]:
-				box(room,"ParkedInnerDoor",Vector3(x*1.45,1.15,7.7),Vector3(0.5,2.3,0.08),mats.tank)
+				box(room,"ParkedInnerDoor",Vector3(x*1.65,1.15,7.0),Vector3(0.5,2.3,0.08),mats.tank)
 			sign_at(room,"AirlockProtocol","ШЛЮЗ 06 / ВЫХОД НА ПОВЕРХНОСТЬ",Vector3(0,2.7,9.0),PI,Color(1,0.76,0.4),22)
 
 func make_rooms() -> void:
 	var rooms := group(world,"Rooms")
 	var corridor := group(world,"RingCorridor")
-	slab(corridor,"ContinuousFloor",R_GARDEN,R_HALL,0,TAU,0,0.24,mats.floor,24)
+	slab(corridor,"ContinuousFloor",R_GARDEN,R_HALL,0,TAU,0,0.24,mats.floor,24,false)
 	var roof := group(corridor,"Roof")
 	slab(roof,"FlatRoof",R_GARDEN-0.03,R_HALL+0.04,0,TAU,3.38,0.23,mats.roof,24)
 	var names := ["LivingQuarters","Kitchen","Laboratory","Storage","Utilities","Airlock"]
@@ -381,7 +402,7 @@ func make_rooms() -> void:
 		room.set_meta("purpose",labels[index])
 		var start := -PI/6
 		var end := PI/6
-		slab(room,"Floor",R_HALL,R_OUTER,start,end,0,0.24,mats.floor,4)
+		slab(room,"Floor",R_HALL,R_OUTER,start,end,0,0.24,mats.floor,4,false)
 		var room_roof := group(room,"Roof")
 		slab(room_roof,"FlatRoof",R_HALL-0.03,R_OUTER+0.03,start,end,3.38,0.23,mats.roof,4)
 		for i: int in range(4):
@@ -393,22 +414,25 @@ func make_rooms() -> void:
 		wall(room,"RadialPartition",point(R_HALL,end),point(R_OUTER,end))
 		var door_center := (point(R_HALL,-PI/12)+point(R_HALL,0))*0.5
 		sign_at(room,"RoomSign",labels[index],door_center+Vector3(0,2.79,-0.15),PI-PI/24,Color(0.77,0.91,0.85),22)
-		box(room,"CeilingStrip",Vector3(0,3.1,9.7),Vector3(3.2,0.045,0.16),mats.cold_light if index==2 else mats.warm_light)
-		light_at(room,"RoomLight",Vector3(0,2.65,9.65),Color(0.69,0.85,1) if index==2 else (Color(1,0.83,0.65) if index in [0,1] else Color(0.82,0.9,0.94)),1.65,6.5)
-		room_props(room,index)
+		box(room,"CeilingStrip",Vector3(0,3.1,9.7*LAYOUT_SCALE),Vector3(4.3,0.045,0.16),mats.cold_light if index==2 else mats.warm_light)
+		light_at(room,"RoomLight",Vector3(0,2.65,9.65*LAYOUT_SCALE),Color(0.69,0.85,1) if index==2 else (Color(1,0.83,0.65) if index in [0,1] else Color(0.82,0.9,0.94)),1.9,6.5*LAYOUT_SCALE)
+		var furnishings := group(room,"Furnishings")
+		# Move furniture into the larger rooms without enlarging beds or chairs.
+		furnishings.position.z = 10.3*(LAYOUT_SCALE-1.0)
+		room_props(furnishings,index)
 		var angle := index*PI/3
-		var at := point(6.65,angle,2.7)
-		light_at(corridor,"HallLight",at,Color(0.76,0.88,0.88),0.85,4.8)
-		var luminaire := box(corridor,"HallLuminaire",point(6.65,angle,3.1),Vector3(1.45,0.045,0.16),mats.cold_light)
+		var at := point(6.65*LAYOUT_SCALE,angle,2.7)
+		light_at(corridor,"HallLight",at,Color(0.76,0.88,0.88),1.0,4.8*LAYOUT_SCALE)
+		var luminaire := box(corridor,"HallLuminaire",point(6.65*LAYOUT_SCALE,angle,3.1),Vector3(1.95,0.045,0.16),mats.cold_light)
 		luminaire.rotation.y = angle
 		# Navigation bars are visual only and never catch the player's capsule.
 		for i: int in range(4):
 			var a := angle-PI/6+i*PI/12
-			beam(corridor,"FloorGuide",point(5.75,a,0.012),point(5.75,a+PI/12,0.012),0.035,mats.green_light)
+			beam(corridor,"FloorGuide",point(5.75*LAYOUT_SCALE,a,0.012),point(5.75*LAYOUT_SCALE,a+PI/12,0.012),0.035,mats.green_light)
 		var waypoint := Marker3D.new()
 		waypoint.name = names[index]+"Entry"
 		world.get_node("Waypoints").add_child(waypoint)
-		waypoint.position = point(9.0,angle-PI/24,0.02)
+		waypoint.position = point(9.0*LAYOUT_SCALE,angle-PI/24,0.02)
 
 func make_exterior() -> void:
 	var exterior := group(world,"Exterior")
@@ -426,7 +450,7 @@ func make_exterior() -> void:
 			for d: Vector2i in [Vector2i(0,0),Vector2i(1,0),Vector2i(1,1),Vector2i(0,1)]:
 				var v := Vector3((x+d.x)*2,0,(z+d.y)*2)
 				var distance := Vector2(v.x,v.z).length()
-				v.y = -0.45+terrain.get_noise_2d(v.x,v.z)*1.4*smoothstep(16,30,distance)
+				v.y = -0.45+terrain.get_noise_2d(v.x,v.z)*1.4*smoothstep(R_OUTER+5.0,36,distance)
 				for crater: Vector3 in craters:
 					var dist := Vector2(v.x-crater.x,v.z-crater.z).length()
 					v.y += 0.5*exp(-pow((dist-3.5)/1.0,2))-0.9*exp(-pow(dist/2.6,2))
@@ -444,7 +468,7 @@ func make_exterior() -> void:
 		mesh.radial_segments = 5
 		mesh.rings = 2
 		mesh.material = mats.rock
-		var at := point(rng.randf_range(17,40),rng.randf_range(0,TAU),-0.3)
+		var at := point(rng.randf_range(R_OUTER+6.0,43),rng.randf_range(0,TAU),-0.3)
 		var rock := mesh_node(exterior,"Rock%02d" % i,mesh,at,true)
 		rock.rotation = Vector3(rng.randf(),rng.randf()*TAU,rng.randf())
 	# The lock is in sector 5, one facet to the left of its centre.
@@ -497,11 +521,11 @@ func make_exterior() -> void:
 	var stars := mesh_node(sky_nodes,"Stars",star_surface.commit(),Vector3.ZERO)
 	stars.get_node("Visuals").cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	# Exterior identification, shallow roof service units and landing feet.
-	sign_at(exterior,"StationName","SELENE / 01\nLUNAR BOTANICAL STATION",Vector3(0,2.0,12.65),0,Color(0.9,0.92,0.83),29)
+	sign_at(exterior,"StationName","SELENE / 01\nLUNAR BOTANICAL STATION",Vector3(0,2.0,R_OUTER+0.05),0,Color(0.9,0.92,0.83),29)
 	for index: int in range(6):
 		var angle_leg := index*PI/3
-		cylinder(exterior,"FoundationFoot",point(10.8,angle_leg,-0.32),0.5,0.32,mats.metal,true)
-		var unit := box(exterior,"RoofServiceUnit",point(10.2,angle_leg,3.65),Vector3(1.4,0.55,0.9),mats.metal)
+		cylinder(exterior,"FoundationFoot",point(10.8*LAYOUT_SCALE,angle_leg,-0.32),0.5,0.32,mats.metal,true)
+		var unit := box(exterior,"RoofServiceUnit",point(10.2*LAYOUT_SCALE,angle_leg,3.65),Vector3(1.4,0.55,0.9),mats.metal)
 		unit.rotation.y = angle_leg
 
 func build() -> void:
@@ -535,6 +559,7 @@ func build() -> void:
 	world = Node3D.new()
 	world.name = "LunarStation"
 	group(world,"Waypoints")
+	make_floor_collision()
 	make_greenhouse()
 	make_rooms()
 	make_exterior()
@@ -560,10 +585,10 @@ func build() -> void:
 	var player: Node3D = load("res://scenes/player/player.tscn").instantiate()
 	player.name = "Player"
 	world.add_child(player)
-	player.position = Vector3(-0.8,0.02,9.0)
+	player.position = Vector3(-0.8,0.02,9.0*LAYOUT_SCALE)
 	player.rotation.y = 0
 	var views := group(world,"PreviewCameras")
-	for data: Array in [["Exterior",Vector3(23,13,26),Vector3(0,1.2,0)],["Greenhouse",Vector3(4.6,1.8,0),Vector3(-1,1.6,0)],["Plan",Vector3(0,36,0.01),Vector3.ZERO]]:
+	for data: Array in [["Exterior",Vector3(23,13,26)*LAYOUT_SCALE,Vector3(0,1.2,0)],["Greenhouse",Vector3(4.6*LAYOUT_SCALE,1.8,0),Vector3(-1,1.6,0)],["Plan",Vector3(0,42,0.01),Vector3.ZERO]]:
 		var camera := Camera3D.new()
 		camera.name = data[0]
 		views.add_child(camera)
@@ -574,7 +599,7 @@ func build() -> void:
 		camera.look_at_from_position(camera.position,data[2])
 		if data[0] == "Plan":
 			camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-			camera.size = 29
+			camera.size = 39.15
 	save_scene(world,"res://scenes/greenhouse/greenhouse_world.tscn")
 	print("Station saved: editable nodes, reusable props, six existing planting slots.")
 	world.free()

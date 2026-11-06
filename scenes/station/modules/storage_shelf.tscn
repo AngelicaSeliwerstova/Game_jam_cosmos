@@ -75,113 +75,113 @@ size = Vector3(0.44, 0.42, 0.47)
 material = ExtResource("3_qavpe")
 size = Vector3(0.44, 0.42, 0.47)
 
-[node name="StorageShelf" type="Node3D" unique_id=102004311]
+[node name="StorageShelf" type="Node3D" unique_id=1322298358]
 
-[node name="SolidFootprint" type="StaticBody3D" parent="." unique_id=981917259]
+[node name="SolidFootprint" type="StaticBody3D" parent="." unique_id=1591617553]
 collision_mask = 0
 
-[node name="@CollisionShape3D@2" type="CollisionShape3D" parent="SolidFootprint" unique_id=390981582]
+[node name="@CollisionShape3D@2" type="CollisionShape3D" parent="SolidFootprint" unique_id=1587246136]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("BoxShape3D_yfuhn")
 
-[node name="Upright" type="Node3D" parent="." unique_id=1361164182]
+[node name="Upright" type="Node3D" parent="." unique_id=1467437343]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02, 1.1, -0.32)
 
-[node name="Visuals" type="MeshInstance3D" parent="Upright" unique_id=1723907903]
+[node name="Visuals" type="MeshInstance3D" parent="Upright" unique_id=169882805]
 mesh = SubResource("BoxMesh_qy5ea")
 
-[node name="Upright2" type="Node3D" parent="." unique_id=65481760]
+[node name="Upright2" type="Node3D" parent="." unique_id=1847420159]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02, 1.1, 0.32)
 
-[node name="Visuals" type="MeshInstance3D" parent="Upright2" unique_id=1173116660]
+[node name="Visuals" type="MeshInstance3D" parent="Upright2" unique_id=1720347894]
 mesh = SubResource("BoxMesh_mcafw")
 
-[node name="Upright3" type="Node3D" parent="." unique_id=1611335184]
+[node name="Upright3" type="Node3D" parent="." unique_id=2120096333]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02, 1.1, -0.32)
 
-[node name="Visuals" type="MeshInstance3D" parent="Upright3" unique_id=229770482]
+[node name="Visuals" type="MeshInstance3D" parent="Upright3" unique_id=757988713]
 mesh = SubResource("BoxMesh_2yr13")
 
-[node name="Upright4" type="Node3D" parent="." unique_id=1917781733]
+[node name="Upright4" type="Node3D" parent="." unique_id=1308228475]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02, 1.1, 0.32)
 
-[node name="Visuals" type="MeshInstance3D" parent="Upright4" unique_id=948499643]
+[node name="Visuals" type="MeshInstance3D" parent="Upright4" unique_id=1218302418]
 mesh = SubResource("BoxMesh_rdler")
 
-[node name="Shelf" type="Node3D" parent="." unique_id=713181595]
+[node name="Shelf" type="Node3D" parent="." unique_id=414548424]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Shelf" unique_id=728522340]
+[node name="Visuals" type="MeshInstance3D" parent="Shelf" unique_id=967088749]
 mesh = SubResource("BoxMesh_gsxgb")
 
-[node name="Shelf2" type="Node3D" parent="." unique_id=1313217428]
+[node name="Shelf2" type="Node3D" parent="." unique_id=415294975]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Shelf2" unique_id=720235654]
+[node name="Visuals" type="MeshInstance3D" parent="Shelf2" unique_id=48173455]
 mesh = SubResource("BoxMesh_eidwt")
 
-[node name="Shelf3" type="Node3D" parent="." unique_id=682476333]
+[node name="Shelf3" type="Node3D" parent="." unique_id=1065668897]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.54, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Shelf3" unique_id=1764159175]
+[node name="Visuals" type="MeshInstance3D" parent="Shelf3" unique_id=1081008474]
 mesh = SubResource("BoxMesh_s7l3i")
 
-[node name="Shelf4" type="Node3D" parent="." unique_id=38177774]
+[node name="Shelf4" type="Node3D" parent="." unique_id=1213666378]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.18, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Shelf4" unique_id=1414732298]
+[node name="Visuals" type="MeshInstance3D" parent="Shelf4" unique_id=1107258926]
 mesh = SubResource("BoxMesh_k17k4")
 
-[node name="Canister" type="Node3D" parent="." unique_id=1871965785]
+[node name="Canister" type="Node3D" parent="." unique_id=439475486]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.37, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister" unique_id=1461219838]
+[node name="Visuals" type="MeshInstance3D" parent="Canister" unique_id=466381352]
 mesh = SubResource("BoxMesh_jp8le")
 
-[node name="Canister2" type="Node3D" parent="." unique_id=1392394218]
+[node name="Canister2" type="Node3D" parent="." unique_id=1960018624]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister2" unique_id=1843158806]
+[node name="Visuals" type="MeshInstance3D" parent="Canister2" unique_id=807408063]
 mesh = SubResource("BoxMesh_oqges")
 
-[node name="Canister3" type="Node3D" parent="." unique_id=1092428912]
+[node name="Canister3" type="Node3D" parent="." unique_id=753420767]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.37, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister3" unique_id=107466014]
+[node name="Visuals" type="MeshInstance3D" parent="Canister3" unique_id=1074754782]
 mesh = SubResource("BoxMesh_sh6q7")
 
-[node name="Canister4" type="Node3D" parent="." unique_id=1600036615]
+[node name="Canister4" type="Node3D" parent="." unique_id=1092483382]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 1.08, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister4" unique_id=1104936907]
+[node name="Visuals" type="MeshInstance3D" parent="Canister4" unique_id=264136323]
 mesh = SubResource("BoxMesh_2jro4")
 
-[node name="Canister5" type="Node3D" parent="." unique_id=106323280]
+[node name="Canister5" type="Node3D" parent="." unique_id=258789629]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister5" unique_id=1805588186]
+[node name="Visuals" type="MeshInstance3D" parent="Canister5" unique_id=534794588]
 mesh = SubResource("BoxMesh_s58ck")
 
-[node name="Canister6" type="Node3D" parent="." unique_id=1823901726]
+[node name="Canister6" type="Node3D" parent="." unique_id=1452417898]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 1.08, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister6" unique_id=1922630395]
+[node name="Visuals" type="MeshInstance3D" parent="Canister6" unique_id=2144794384]
 mesh = SubResource("BoxMesh_lv5hg")
 
-[node name="Canister7" type="Node3D" parent="." unique_id=1975576091]
+[node name="Canister7" type="Node3D" parent="." unique_id=1681814100]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 1.79, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister7" unique_id=1716260778]
+[node name="Visuals" type="MeshInstance3D" parent="Canister7" unique_id=886854720]
 mesh = SubResource("BoxMesh_13ne8")
 
-[node name="Canister8" type="Node3D" parent="." unique_id=526820224]
+[node name="Canister8" type="Node3D" parent="." unique_id=2039238832]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.79, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister8" unique_id=947354911]
+[node name="Visuals" type="MeshInstance3D" parent="Canister8" unique_id=1438502334]
 mesh = SubResource("BoxMesh_mh3lj")
 
-[node name="Canister9" type="Node3D" parent="." unique_id=1079701565]
+[node name="Canister9" type="Node3D" parent="." unique_id=244154264]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 1.79, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Canister9" unique_id=145709361]
+[node name="Visuals" type="MeshInstance3D" parent="Canister9" unique_id=565558126]
 mesh = SubResource("BoxMesh_osm3e")
