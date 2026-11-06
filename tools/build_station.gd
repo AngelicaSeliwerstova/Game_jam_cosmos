@@ -669,6 +669,9 @@ func build() -> void:
 	world.name = "LunarStation"
 	group(world,"Waypoints")
 	make_floor_collision()
+	var gravity_zone: Node3D = load("res://scenes/station/station_gravity.tscn").instantiate()
+	gravity_zone.name = "StationGravity"
+	world.add_child(gravity_zone)
 	make_greenhouse()
 	make_rooms()
 	make_exterior()

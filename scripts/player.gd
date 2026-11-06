@@ -35,6 +35,9 @@ func _process(_delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Read the actual world gravity, including the station's Area3D override.
+	# Crossing the airlock changes acceleration, not position or velocity.
+	gravity = maxf(0.0, -get_gravity().y)
 	rotation.y = _view_yaw
 	if not controls_enabled or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		velocity = Vector3.ZERO

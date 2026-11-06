@@ -1,5 +1,7 @@
 [gd_scene format=4]
 
+[ext_resource type="PackedScene" path="res://scenes/station/station_gravity.tscn" id="gravity_zone"]
+
 [ext_resource type="Material" path="res://assets/materials/station_floor.tres" id="1_mnnv5"]
 [ext_resource type="Material" path="res://assets/materials/station_metal.tres" id="2_mi6et"]
 [ext_resource type="Material" path="res://assets/materials/station/glass.tres" id="3_l6apa"]
@@ -3891,6 +3893,8 @@ ambient_light_energy = 0.65
 reflected_light_source = 2
 
 [node name="LunarStation" type="Node3D" unique_id=734586523]
+
+[node name="StationGravity" parent="." instance=ExtResource("gravity_zone")]
 
 [node name="Waypoints" type="Node3D" parent="." unique_id=279699349]
 
