@@ -26,6 +26,7 @@
 [ext_resource type="Material" path="res://assets/materials/station/star.tres" id="24_jhgw2"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="25_xgv0i"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="26_yd0k1"]
+[ext_resource type="Script" path="res://scripts/bed.gd" id="27_bed"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_nubds"]
 _surfaces = [{
@@ -6489,6 +6490,7 @@ shape = SubResource("BoxShape3D_37til")
 [node name="Mattress" type="StaticBody3D" parent="Rooms/LivingQuarters" unique_id=24421990]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.59, 10.4)
 collision_mask = 0
+script = ExtResource("27_bed")
 
 [node name="Visuals" type="MeshInstance3D" parent="Rooms/LivingQuarters/Mattress" unique_id=1141416355]
 mesh = SubResource("BoxMesh_v1hns")

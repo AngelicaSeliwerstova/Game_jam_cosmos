@@ -1,0 +1,119 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/sleep_panel.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/themes/lunar_theme.tres" id="2_theme"]
+
+[node name="SleepPanel" type="CanvasLayer"]
+process_mode = 3
+layer = 6
+script = ExtResource("1_script")
+
+[node name="Overlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme = ExtResource("2_theme")
+
+[node name="Scrim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.02, 0.025, 0.78)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" type="PanelContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/Card"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ConfirmView" type="VBoxContainer" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="ConfirmTitle" type="Label" parent="Overlay/Center/Card/Content/ConfirmView"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Завершить день 1?"
+horizontal_alignment = 1
+
+[node name="ConfirmDescription" type="Label" parent="Overlay/Center/Card/Content/ConfirmView"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+text = "Сон рассчитывает рост всех растений, сбрасывает полив и начинает новый день. Время идёт только так."
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SleepButton" type="Button" parent="Overlay/Center/Card/Content/ConfirmView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Лечь спать"
+
+[node name="CancelButton" type="Button" parent="Overlay/Center/Card/Content/ConfirmView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Отмена"
+
+[node name="ReportView" type="VBoxContainer" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="ReportTitle" type="Label" parent="Overlay/Center/Card/Content/ReportView"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "День 2"
+horizontal_alignment = 1
+
+[node name="ReportText" type="Label" parent="Overlay/Center/Card/Content/ReportView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "Выросло растений: 0\nБез полива осталось: 0\nГотово к сбору: 0"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="Overlay/Center/Card/Content/ReportView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Продолжить"
+
+[node name="Hint" type="Label" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.74, 0.71, 1)
+theme_override_font_sizes/font_size = 16
+text = "E — подтвердить   ·   Esc — отмена"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Overlay/Center/Card/Content/ConfirmView/SleepButton" to="." method="_on_sleep_pressed"]
+[connection signal="pressed" from="Overlay/Center/Card/Content/ConfirmView/CancelButton" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Overlay/Center/Card/Content/ReportView/ContinueButton" to="." method="_on_continue_pressed"]

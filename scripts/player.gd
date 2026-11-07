@@ -1,14 +1,14 @@
 class_name StationPlayer
 extends CharacterBody3D
 
-signal target_changed(slot: PlantingSlot)
-signal inspection_requested(slot: PlantingSlot)
+signal target_changed(target: Interactable)
+signal inspection_requested(target: Interactable)
 
 @export var walk_speed: float = 2.7
 @export var mouse_sensitivity: float = 0.0025
 
 var controls_enabled: bool = false
-var target: PlantingSlot
+var target: Interactable
 var gravity: float = float(ProjectSettings.get_setting("physics/3d/default_gravity"))
 
 @onready var head: Node3D = $Head
@@ -59,10 +59,10 @@ func interact() -> void:
 
 func _update_target() -> void:
 	interaction_ray.force_raycast_update()
-	_set_target(interaction_ray.get_collider() as PlantingSlot)
+	_set_target(interaction_ray.get_collider() as Interactable)
 
 
-func _set_target(value: PlantingSlot) -> void:
+func _set_target(value: Interactable) -> void:
 	if target == value:
 		return
 	if is_instance_valid(target):
