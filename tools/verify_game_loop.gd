@@ -128,7 +128,7 @@ func run() -> void:
 	var scene: Control = current_scene
 	var world: Node3D = scene.get_node("WorldViewport/World")
 	var slots: Node3D = world.get_node("PlantingSlots")
-	var bed: StationBed = world.get_node("Rooms/LivingQuarters/Mattress")
+	var bed: StationBed = world.get_node("Rooms/LivingQuarters/Furnishings/Mattress")
 	var player: StationPlayer = scene.player
 	var slot0: PlantingSlot = slots.get_node("Slot1")
 
@@ -138,11 +138,9 @@ func run() -> void:
 	check(state.day == 1, "day does not advance without sleep")
 
 	# The existing ray must find the mattress as a general interactable.
-	player.global_position = Vector3(-2.6, 0.025, 8.9)
-	player.velocity = Vector3.ZERO
-	player.rotation = Vector3.ZERO
-	player.head.rotation = Vector3.ZERO
-	player.camera.look_at(bed.global_position)
+	var bed_at := Vector3(-3.1, 0.025, 12.5)
+	var bed_direction := (bed.global_position - (bed_at + Vector3.UP * player.head.position.y)).normalized()
+	player.teleport_to(bed_at, atan2(-bed_direction.x, -bed_direction.z), asin(bed_direction.y))
 	await frames(6)
 	player._update_target()
 	check(player.target == bed, "interaction ray targets the bed")

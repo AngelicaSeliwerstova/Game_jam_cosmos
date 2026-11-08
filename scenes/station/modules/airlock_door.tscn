@@ -1,0 +1,140 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/station_door.gd" id="1_u173k"]
+[ext_resource type="Material" path="res://assets/materials/station_wall.tres" id="2_i522i"]
+[ext_resource type="Material" path="res://assets/materials/station/tank.tres" id="3_xalri"]
+[ext_resource type="Material" path="res://assets/materials/station/green_light.tres" id="4_6n34s"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_120l1"]
+material = ExtResource("2_i522i")
+size = Vector3(0.885, 2.38, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_y4v1n"]
+material = ExtResource("3_xalri")
+size = Vector3(0.66375, 0.48, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8n1hm"]
+material = ExtResource("3_xalri")
+size = Vector3(0.66375, 0.48, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0ktyt"]
+material = ExtResource("4_6n34s")
+size = Vector3(0.05, 2.38, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gwdph"]
+material = ExtResource("4_6n34s")
+size = Vector3(0.05, 2.38, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7tuqi"]
+size = Vector3(0.885, 2.38, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3aosw"]
+material = ExtResource("2_i522i")
+size = Vector3(0.885, 2.38, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c7xof"]
+material = ExtResource("3_xalri")
+size = Vector3(0.66375, 0.48, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ksisi"]
+material = ExtResource("3_xalri")
+size = Vector3(0.66375, 0.48, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chdiq"]
+material = ExtResource("4_6n34s")
+size = Vector3(0.05, 2.38, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a3b60"]
+material = ExtResource("4_6n34s")
+size = Vector3(0.05, 2.38, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sux1r"]
+size = Vector3(0.885, 2.38, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vstvm"]
+size = Vector3(2.4, 2.8, 1.6)
+
+[node name="Door" type="Node3D" unique_id=1672630120]
+script = ExtResource("1_u173k")
+mode = 2
+
+[node name="LeftLeaf" type="AnimatableBody3D" parent="." unique_id=1073395880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.2, 0)
+collision_mask = 2
+
+[node name="Panel" type="Node3D" parent="LeftLeaf" unique_id=473982366]
+
+[node name="Visuals" type="MeshInstance3D" parent="LeftLeaf/Panel" unique_id=1753773373]
+mesh = SubResource("BoxMesh_120l1")
+
+[node name="Inset" type="Node3D" parent="LeftLeaf" unique_id=549949424]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.061)
+
+[node name="Visuals" type="MeshInstance3D" parent="LeftLeaf/Inset" unique_id=733179735]
+mesh = SubResource("BoxMesh_y4v1n")
+
+[node name="BackInset" type="Node3D" parent="LeftLeaf" unique_id=725438311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.061)
+
+[node name="Visuals" type="MeshInstance3D" parent="LeftLeaf/BackInset" unique_id=457210009]
+mesh = SubResource("BoxMesh_8n1hm")
+
+[node name="StatusStripe" type="Node3D" parent="LeftLeaf" unique_id=229228179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3875, 0, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="LeftLeaf/StatusStripe" unique_id=1186190865]
+mesh = SubResource("BoxMesh_0ktyt")
+
+[node name="StatusStripe2" type="Node3D" parent="LeftLeaf" unique_id=150231931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3875, 0, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="LeftLeaf/StatusStripe2" unique_id=494776121]
+mesh = SubResource("BoxMesh_gwdph")
+
+[node name="Collision" type="CollisionShape3D" parent="LeftLeaf" unique_id=1153884052]
+shape = SubResource("BoxShape3D_7tuqi")
+
+[node name="RightLeaf" type="AnimatableBody3D" parent="." unique_id=77401646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.2, 0)
+collision_mask = 2
+
+[node name="Panel" type="Node3D" parent="RightLeaf" unique_id=1991180595]
+
+[node name="Visuals" type="MeshInstance3D" parent="RightLeaf/Panel" unique_id=57709241]
+mesh = SubResource("BoxMesh_3aosw")
+
+[node name="Inset" type="Node3D" parent="RightLeaf" unique_id=15918554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.061)
+
+[node name="Visuals" type="MeshInstance3D" parent="RightLeaf/Inset" unique_id=1323693721]
+mesh = SubResource("BoxMesh_c7xof")
+
+[node name="BackInset" type="Node3D" parent="RightLeaf" unique_id=1876388058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.061)
+
+[node name="Visuals" type="MeshInstance3D" parent="RightLeaf/BackInset" unique_id=1104628904]
+mesh = SubResource("BoxMesh_ksisi")
+
+[node name="StatusStripe" type="Node3D" parent="RightLeaf" unique_id=490484032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3875, 0, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="RightLeaf/StatusStripe" unique_id=163114234]
+mesh = SubResource("BoxMesh_chdiq")
+
+[node name="StatusStripe2" type="Node3D" parent="RightLeaf" unique_id=105770325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3875, 0, 0)
+
+[node name="Visuals" type="MeshInstance3D" parent="RightLeaf/StatusStripe2" unique_id=379706023]
+mesh = SubResource("BoxMesh_a3b60")
+
+[node name="Collision" type="CollisionShape3D" parent="RightLeaf" unique_id=412237658]
+shape = SubResource("BoxShape3D_sux1r")
+
+[node name="CloseGuard" type="Area3D" parent="." unique_id=1203136832]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="@CollisionShape3D@6" type="CollisionShape3D" parent="CloseGuard" unique_id=431525437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("BoxShape3D_vstvm")

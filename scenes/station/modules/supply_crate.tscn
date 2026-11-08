@@ -22,37 +22,37 @@ size = Vector3(0.045, 0.78, 0.72)
 material = ExtResource("2_m1bcc")
 size = Vector3(0.045, 0.78, 0.72)
 
-[node name="SupplyCrate" type="Node3D" unique_id=1310303590]
+[node name="SupplyCrate" type="Node3D" unique_id=100304830]
 
-[node name="Body" type="StaticBody3D" parent="." unique_id=1214178356]
+[node name="Body" type="StaticBody3D" parent="." unique_id=1871089691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
 collision_mask = 0
 
-[node name="Visuals" type="MeshInstance3D" parent="Body" unique_id=556639307]
+[node name="Visuals" type="MeshInstance3D" parent="Body" unique_id=1056800297]
 mesh = SubResource("BoxMesh_mri36")
 
-[node name="Collision" type="CollisionShape3D" parent="Body" unique_id=1593988829]
+[node name="Collision" type="CollisionShape3D" parent="Body" unique_id=1230052444]
 shape = SubResource("BoxShape3D_encl6")
 
-[node name="Lid" type="Node3D" parent="." unique_id=2124620206]
+[node name="Lid" type="Node3D" parent="." unique_id=1243612092]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Lid" unique_id=1163124720]
+[node name="Visuals" type="MeshInstance3D" parent="Lid" unique_id=192148606]
 mesh = SubResource("BoxMesh_kcd0l")
 
-[node name="Band" type="Node3D" parent="." unique_id=463679394]
+[node name="Band" type="Node3D" parent="." unique_id=1850469321]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29, 0.38, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Band" unique_id=1621693515]
+[node name="Visuals" type="MeshInstance3D" parent="Band" unique_id=1857724737]
 mesh = SubResource("BoxMesh_24s4a")
 
-[node name="Band2" type="Node3D" parent="." unique_id=520427670]
+[node name="Band2" type="Node3D" parent="." unique_id=1145013204]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0.38, 0)
 
-[node name="Visuals" type="MeshInstance3D" parent="Band2" unique_id=1923202808]
+[node name="Visuals" type="MeshInstance3D" parent="Band2" unique_id=204295073]
 mesh = SubResource("BoxMesh_8dgjv")
 
-[node name="InventoryTag" type="Label3D" parent="." unique_id=328553058]
+[node name="InventoryTag" type="Label3D" parent="." unique_id=1197794986]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0.357)
 pixel_size = 0.0035
 texture_filter = 0

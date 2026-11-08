@@ -12,7 +12,6 @@ signal capture_requested
 
 var game_state
 
-
 func _ready() -> void:
 	game_state = get_node_or_null("/root/GameState")
 	if game_state != null and not game_state.changed.is_connected(_refresh_stats):
@@ -20,10 +19,9 @@ func _ready() -> void:
 	_refresh_stats()
 
 
-func show_target(target: Interactable) -> void:
-	interaction_hint.visible = target != null
-	if target != null:
-		interaction_hint.text = target.get_interaction_hint()
+func show_target(available: bool, prompt: String = "E — осмотреть грядку") -> void:
+	interaction_hint.text = prompt
+	interaction_hint.visible = available
 
 
 func set_captured(value: bool) -> void:

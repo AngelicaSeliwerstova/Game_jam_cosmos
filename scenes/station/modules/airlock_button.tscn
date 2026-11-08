@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/door_button.gd" id="1_eu8fd"]
+[ext_resource type="Material" path="res://assets/materials/station_metal.tres" id="2_nrtqe"]
+[ext_resource type="Material" path="res://assets/materials/station/warm_light.tres" id="3_ngoh8"]
+[ext_resource type="Material" path="res://assets/materials/station/green_light.tres" id="4_7jfy4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wvdpg"]
+material = ExtResource("2_nrtqe")
+size = Vector3(0.32, 0.44, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7ma1u"]
+material = ExtResource("3_ngoh8")
+size = Vector3(0.23, 0.24, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cvvhy"]
+material = ExtResource("4_7jfy4")
+size = Vector3(0.35, 0.47, 0.03)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_scxhh"]
+size = Vector3(0.32, 0.44, 0.2)
+
+[node name="Button" type="StaticBody3D" unique_id=1506380790]
+collision_mask = 0
+script = ExtResource("1_eu8fd")
+
+[node name="Housing" type="Node3D" parent="." unique_id=643427563]
+
+[node name="Visuals" type="MeshInstance3D" parent="Housing" unique_id=216066343]
+mesh = SubResource("BoxMesh_wvdpg")
+
+[node name="PressPlate" type="Node3D" parent="." unique_id=1498790681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.09)
+
+[node name="Visuals" type="MeshInstance3D" parent="PressPlate" unique_id=189235806]
+mesh = SubResource("BoxMesh_7ma1u")
+
+[node name="Highlight" type="MeshInstance3D" parent="." unique_id=2003797690]
+visible = false
+mesh = SubResource("BoxMesh_cvvhy")
+
+[node name="@CollisionShape3D@7" type="CollisionShape3D" parent="." unique_id=178324666]
+shape = SubResource("BoxShape3D_scxhh")
+
+[node name="Title" type="Label3D" parent="." unique_id=865378306]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0.1)
+pixel_size = 0.0035
+texture_filter = 0
+modulate = Color(1, 0.85, 0.5, 1)
+text = "ШЛЮЗ"
+font_size = 20
+outline_size = 3
+
+[node name="Status" type="Label3D" parent="." unique_id=395234898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.1)
+pixel_size = 0.0035
+texture_filter = 0
+modulate = Color(0.8, 0.95, 0.85, 1)
+text = "ГОТОВ"
+font_size = 17
+outline_size = 3

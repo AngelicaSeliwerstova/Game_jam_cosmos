@@ -40,6 +40,9 @@ func _process(_delta: float) -> void:
 	var captured: bool = Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 	player.set_controls_enabled(captured)
 	hud.set_captured(captured)
+	if captured:
+		var prompt := player.get_target_prompt()
+		hud.show_target(not prompt.is_empty(), prompt)
 
 
 func _fit_image() -> void:
@@ -105,8 +108,9 @@ func _release_mouse() -> void:
 	hud.set_captured(false)
 
 
-func _on_target_changed(target: Interactable) -> void:
-	hud.show_target(target)
+func _on_target_changed(_target: Node) -> void:
+	var prompt := player.get_target_prompt()
+	hud.show_target(not prompt.is_empty(), prompt)
 
 
 func _on_interaction_requested(target: Interactable) -> void:
