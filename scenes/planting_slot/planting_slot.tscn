@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/planting_slot.gd" id="1_script"]
 [ext_resource type="Material" path="res://assets/materials/planter.tres" id="2_planter"]
@@ -25,26 +25,76 @@ texture_filter = 0
 albedo_color = Color(0.29, 0.55, 0.31, 1)
 roughness = 0.9
 
-[sub_resource type="CylinderMesh" id="Mesh_stem"]
-material = SubResource("Material_plant")
-top_radius = 0.045
-bottom_radius = 0.065
-height = 0.8
-radial_segments = 8
+[sub_resource type="StandardMaterial3D" id="Material_flower"]
+texture_filter = 0
+albedo_color = Color(0.93, 0.77, 0.24, 1)
+roughness = 0.85
+emission_enabled = true
+emission = Color(0.2, 0.14, 0.02, 1)
+emission_energy_multiplier = 0.35
 
-[sub_resource type="SphereMesh" id="Mesh_leaf"]
+[sub_resource type="CylinderMesh" id="Mesh_sprout_stem"]
 material = SubResource("Material_plant")
-radius = 0.27
-height = 0.54
-radial_segments = 8
-rings = 4
+top_radius = 0.015
+bottom_radius = 0.025
+height = 0.22
+radial_segments = 6
 
-[sub_resource type="SphereMesh" id="Mesh_bud"]
+[sub_resource type="SphereMesh" id="Mesh_sprout_leaf"]
 material = SubResource("Material_plant")
-radius = 0.2
-height = 0.4
-radial_segments = 8
-rings = 4
+radius = 0.06
+height = 0.12
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="Mesh_young_stem"]
+material = SubResource("Material_plant")
+top_radius = 0.025
+bottom_radius = 0.04
+height = 0.52
+radial_segments = 6
+
+[sub_resource type="SphereMesh" id="Mesh_young_leaf"]
+material = SubResource("Material_plant")
+radius = 0.11
+height = 0.22
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="Mesh_young_bud"]
+material = SubResource("Material_plant")
+radius = 0.08
+height = 0.16
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="Mesh_adult_stem"]
+material = SubResource("Material_plant")
+top_radius = 0.03
+bottom_radius = 0.05
+height = 0.84
+radial_segments = 6
+
+[sub_resource type="SphereMesh" id="Mesh_adult_leaf"]
+material = SubResource("Material_plant")
+radius = 0.16
+height = 0.32
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="Mesh_flower_disc"]
+material = SubResource("Material_flower")
+top_radius = 0.22
+bottom_radius = 0.16
+height = 0.07
+radial_segments = 10
+
+[sub_resource type="SphereMesh" id="Mesh_flower_center"]
+material = SubResource("Material_flower")
+radius = 0.07
+height = 0.14
+radial_segments = 6
+rings = 3
 
 [node name="PlantingSlot" type="StaticBody3D"]
 collision_layer = 1
@@ -71,26 +121,94 @@ mesh = SubResource("Mesh_planter")
 position = Vector3(0, 0.81, 0)
 mesh = SubResource("Mesh_soil")
 
-[node name="PlantPlaceholder" type="Node3D" parent="Visuals"]
+[node name="Plants" type="Node3D" parent="Visuals"]
+
+[node name="Sprout" type="Node3D" parent="Visuals/Plants"]
 visible = false
-position = Vector3(0, 0.25, 0)
+position = Vector3(0, 0.84, 0)
 
-[node name="Stem" type="MeshInstance3D" parent="Visuals/PlantPlaceholder"]
+[node name="Stem" type="MeshInstance3D" parent="Visuals/Plants/Sprout"]
+position = Vector3(0, 0.11, 0)
+mesh = SubResource("Mesh_sprout_stem")
+
+[node name="LeftLeaf" type="MeshInstance3D" parent="Visuals/Plants/Sprout"]
+position = Vector3(-0.08, 0.18, 0)
+rotation_degrees = Vector3(0, 0, -35)
+scale = Vector3(1.2, 0.6, 0.7)
+mesh = SubResource("Mesh_sprout_leaf")
+
+[node name="RightLeaf" type="MeshInstance3D" parent="Visuals/Plants/Sprout"]
+position = Vector3(0.08, 0.22, 0)
+rotation_degrees = Vector3(0, 0, 35)
+scale = Vector3(1.2, 0.6, 0.7)
+mesh = SubResource("Mesh_sprout_leaf")
+
+[node name="Young" type="Node3D" parent="Visuals/Plants"]
+visible = false
+position = Vector3(0, 0.84, 0)
+
+[node name="Stem" type="MeshInstance3D" parent="Visuals/Plants/Young"]
+position = Vector3(0, 0.26, 0)
+mesh = SubResource("Mesh_young_stem")
+
+[node name="LeftLeaf" type="MeshInstance3D" parent="Visuals/Plants/Young"]
+position = Vector3(-0.16, 0.31, 0)
+rotation_degrees = Vector3(0, 0, -28)
+scale = Vector3(1.4, 0.55, 0.7)
+mesh = SubResource("Mesh_young_leaf")
+
+[node name="RightLeaf" type="MeshInstance3D" parent="Visuals/Plants/Young"]
+position = Vector3(0.16, 0.37, 0)
+rotation_degrees = Vector3(0, 0, 28)
+scale = Vector3(1.4, 0.55, 0.7)
+mesh = SubResource("Mesh_young_leaf")
+
+[node name="FrontLeaf" type="MeshInstance3D" parent="Visuals/Plants/Young"]
+position = Vector3(0, 0.43, 0.12)
+rotation_degrees = Vector3(32, 0, 0)
+scale = Vector3(0.9, 0.5, 0.6)
+mesh = SubResource("Mesh_young_leaf")
+
+[node name="Bud" type="MeshInstance3D" parent="Visuals/Plants/Young"]
+position = Vector3(0, 0.57, 0)
+mesh = SubResource("Mesh_young_bud")
+
+[node name="Adult" type="Node3D" parent="Visuals/Plants"]
+visible = false
+position = Vector3(0, 0.84, 0)
+
+[node name="Stem" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
+position = Vector3(0, 0.42, 0)
+mesh = SubResource("Mesh_adult_stem")
+
+[node name="LowerLeftLeaf" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
+position = Vector3(-0.23, 0.34, 0)
+rotation_degrees = Vector3(0, 0, -24)
+scale = Vector3(1.5, 0.55, 0.7)
+mesh = SubResource("Mesh_adult_leaf")
+
+[node name="LowerRightLeaf" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
+position = Vector3(0.23, 0.4, 0)
+rotation_degrees = Vector3(0, 0, 24)
+scale = Vector3(1.5, 0.55, 0.7)
+mesh = SubResource("Mesh_adult_leaf")
+
+[node name="UpperFrontLeaf" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
+position = Vector3(0, 0.57, 0.16)
+rotation_degrees = Vector3(35, 0, 0)
+scale = Vector3(1.1, 0.5, 0.65)
+mesh = SubResource("Mesh_adult_leaf")
+
+[node name="UpperBackLeaf" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
+position = Vector3(0, 0.61, -0.16)
+rotation_degrees = Vector3(-35, 0, 0)
+scale = Vector3(1.1, 0.5, 0.65)
+mesh = SubResource("Mesh_adult_leaf")
+
+[node name="Flower" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
+position = Vector3(0, 0.92, 0)
+mesh = SubResource("Mesh_flower_disc")
+
+[node name="FlowerCenter" type="MeshInstance3D" parent="Visuals/Plants/Adult"]
 position = Vector3(0, 0.98, 0)
-mesh = SubResource("Mesh_stem")
-
-[node name="LeftLeaf" type="MeshInstance3D" parent="Visuals/PlantPlaceholder"]
-position = Vector3(-0.23, 1.08, 0)
-rotation_degrees = Vector3(0, 0, -32)
-scale = Vector3(1.4, 0.45, 0.65)
-mesh = SubResource("Mesh_leaf")
-
-[node name="RightLeaf" type="MeshInstance3D" parent="Visuals/PlantPlaceholder"]
-position = Vector3(0.23, 1.22, 0)
-rotation_degrees = Vector3(0, 0, 32)
-scale = Vector3(1.4, 0.45, 0.65)
-mesh = SubResource("Mesh_leaf")
-
-[node name="Bud" type="MeshInstance3D" parent="Visuals/PlantPlaceholder"]
-position = Vector3(0, 1.43, 0)
-mesh = SubResource("Mesh_bud")
+mesh = SubResource("Mesh_flower_center")

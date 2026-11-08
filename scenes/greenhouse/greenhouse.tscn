@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/greenhouse.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/greenhouse/greenhouse_world.tscn" id="2_world"]
 [ext_resource type="PackedScene" path="res://scenes/ui/greenhouse_hud.tscn" id="3_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="4_pause"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inspection_panel.tscn" id="5_inspection"]
+[ext_resource type="PackedScene" path="res://scenes/ui/sleep_panel.tscn" id="6_sleep"]
 
 [node name="Greenhouse" type="Control"]
 layout_mode = 3
@@ -50,6 +51,20 @@ expand_mode = 1
 [node name="PauseMenu" parent="." instance=ExtResource("4_pause")]
 
 [node name="InspectionPanel" parent="." instance=ExtResource("5_inspection")]
+
+[node name="SleepPanel" parent="." instance=ExtResource("6_sleep")]
+
+[node name="SleepFade" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="Fade" type="ColorRect" parent="SleepFade"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 
 [connection signal="pause_requested" from="HUD" to="PauseMenu" method="open"]
 [connection signal="capture_requested" from="HUD" to="." method="_capture_mouse"]

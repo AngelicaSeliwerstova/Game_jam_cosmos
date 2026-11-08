@@ -43,7 +43,7 @@ layout_mode = 2
 
 [node name="Content" type="VBoxContainer" parent="Overlay/Center/Card"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Overlay/Center/Card/Content"]
 unique_name_in_owner = true
@@ -51,10 +51,28 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Грядка № 1"
 
-[node name="Description" type="Label" parent="Overlay/Center/Card/Content"]
+[node name="Status" type="Label" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
-text = "Посадочный модуль лунной теплицы.\n\nПанель осмотра — заглушка прототипа."
+theme_override_colors/font_color = Color(0.7, 0.85, 0.72, 1)
+theme_override_font_sizes/font_size = 22
+text = "Пустая грядка"
+autowrap_mode = 2
+
+[node name="ActionButton" type="Button" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Посадить · 1 семя"
+
+[node name="Reason" type="Label" parent="Overlay/Center/Card/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.74, 0.71, 1)
+theme_override_font_sizes/font_size = 16
+text = "Свободная грядка готова к посадке."
 autowrap_mode = 2
 
 [node name="CloseButton" type="Button" parent="Overlay/Center/Card/Content"]
@@ -70,4 +88,5 @@ theme_override_font_sizes/font_size = 16
 text = "E / Esc — закрыть"
 horizontal_alignment = 1
 
+[connection signal="pressed" from="Overlay/Center/Card/Content/ActionButton" to="." method="_on_action_pressed"]
 [connection signal="button_down" from="Overlay/Center/Card/Content/CloseButton" to="." method="_on_close_button_down"]

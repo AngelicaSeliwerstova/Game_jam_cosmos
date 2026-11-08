@@ -419,8 +419,8 @@ func make_greenhouse() -> void:
 		bed.show_plant = i == 3
 		beds.add_child(bed)
 		bed.position = Vector3((i%3-1)*3.05*LAYOUT_SCALE,0,(-1 if i<3 else 1)*1.9*LAYOUT_SCALE)
-		# Keep the sample plant visible in the editor as well as at runtime.
-		bed.get_node("Visuals/PlantPlaceholder").visible = i == 3
+		# Keep the editor-only sample plant visible when this tool rebuilds the scene.
+		bed.get_node("Visuals/Plants/Adult").visible = i == 3
 		sign_at(garden,"BedNumber","0%d" % (i+1),bed.position+Vector3(0,0.6,0.86),0,Color(0.73,0.9,0.67),23)
 	for x: float in [-2.7*LAYOUT_SCALE,2.7*LAYOUT_SCALE]:
 		light_at(garden,"GrowLight",Vector3(x,2.75,0),Color(0.77,1,0.82),1.6,7.4*LAYOUT_SCALE)

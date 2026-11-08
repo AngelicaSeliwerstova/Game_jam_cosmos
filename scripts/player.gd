@@ -2,7 +2,7 @@ class_name StationPlayer
 extends CharacterBody3D
 
 signal target_changed(target: Node)
-signal inspection_requested(slot: PlantingSlot)
+signal inspection_requested(target: Interactable)
 
 @export var walk_speed: float = 2.7
 @export var sprint_speed: float = 5.2
@@ -98,15 +98,15 @@ func interact() -> void:
 		return
 	# Recheck the nearest solid collider on E, so a cached target cannot bypass a wall.
 	_update_target()
-	if target is PlantingSlot:
+	if target is Interactable:
 		inspection_requested.emit(target)
 	elif is_instance_valid(target) and target.has_method("interact"):
 		target.interact(self)
 
 
 func get_target_prompt() -> String:
-	if target is PlantingSlot:
-		return "E — осмотреть грядку"
+	if target is Interactable:
+		return target.get_interaction_hint()
 	if is_instance_valid(target) and target.has_method("get_interaction_prompt"):
 		return target.get_interaction_prompt()
 	return ""
@@ -118,7 +118,7 @@ func _update_target() -> void:
 	interaction_ray.force_raycast_update()
 	var hit := interaction_ray.get_collider() as Node
 	while hit != null:
-		if hit is PlantingSlot or (hit.has_method("interact") and hit.has_method("get_interaction_prompt")):
+		if hit is Interactable or (hit.has_method("interact") and hit.has_method("get_interaction_prompt")):
 			_set_target(hit)
 			return
 		hit = hit.get_parent()

@@ -224,6 +224,17 @@ func run() -> void:
 	scene.pause_menu._on_resume_pressed()
 	await frames()
 	check(not paused and player.controls_enabled,"resume restores controls")
+	# The existing mattress is now a general interactable and opens sleep by E.
+	var bed: StationBed = world.get_node("Rooms/LivingQuarters/Furnishings/Mattress")
+	await place(Vector3(-3.1,0.025,12.5),bed.global_position)
+	player._update_target()
+	check(player.target==bed,"interaction ray targets the bed")
+	await action("interact")
+	check(scene.sleep_panel.is_open() and scene.sleep_panel.is_confirming(),"E opens sleep confirmation")
+	check(not player.controls_enabled and Input.mouse_mode==Input.MOUSE_MODE_VISIBLE,"sleep confirmation releases cursor")
+	await action("pause")
+	await frames()
+	check(not scene.sleep_panel.is_open() and player.controls_enabled,"Escape cancels sleep and restores control")
 	# Rays through each intended window must reach terrain, never an opaque hull.
 	for index: int in range(6):
 		var angle := index*PI/3+PI/24

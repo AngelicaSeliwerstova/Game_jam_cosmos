@@ -38,6 +38,15 @@ theme_override_colors/font_color = Color(0.65, 0.72, 0.68, 1)
 theme_override_font_sizes/font_size = 18
 text = "LUNAR GARDEN"
 
+[node name="Stats" type="Label" parent="Root/Header/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 0.72, 1)
+theme_override_font_sizes/font_size = 18
+text = "День 1   ·   Вода 24   ·   Семена 6"
+vertical_alignment = 1
+
 [node name="PauseButton" type="Button" parent="Root/Header/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 48)
@@ -79,7 +88,7 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.7, 0.85, 0.72, 1)
-text = "E — осмотреть грядку"
+text = "E — взаимодействовать"
 horizontal_alignment = 1
 autowrap_mode = 2
 
